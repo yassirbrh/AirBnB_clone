@@ -5,6 +5,7 @@
 
 import uuid
 from datetime import datetime
+import models
 
 '''
     Creation of the class BaseModel
@@ -16,13 +17,23 @@ class BaseModel:
         Definition of the class BaseModel
     '''
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         '''
             Initialisation of the instance of class
         '''
-        self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
+        if len(kwargs) != 0:
+            for key in kwargs:
+                if key == 'created_at' or key == 'updated_at':
+                    str_format = "%Y-%m-%dT%H:%M:%S.%f"
+                    time_obj = datetime.strptime(kwargs[key], str_format)
+                    setattr(self, key, time_obj)
+                elif key != '__class__':
+                    setattr(self, key, kwargs[key])
+        else:
+            self.id = str(uuid.uuid4())
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
+        models.storage.new(self)
 
     def __str__(self):
         '''
@@ -38,6 +49,7 @@ class BaseModel:
             Updates the updated_at with the current time
         '''
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         '''
