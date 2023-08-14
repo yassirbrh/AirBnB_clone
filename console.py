@@ -182,6 +182,14 @@ class HBNBCommand(cmd.Cmd):
             if args[1] == 'all()':
                 self.do_all(args[0])
                 return False
+            elif args[1] == 'count()':
+                instances = models.storage.all()
+                count = 0
+                for instance in instances:
+                    if instance.split(".")[0] == args[0]:
+                        count += 1
+                print(count)
+                return False
         print(f"*** Unknown syntax: {line}")
 
 
