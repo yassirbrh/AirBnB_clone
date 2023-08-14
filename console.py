@@ -220,6 +220,16 @@ class HBNBCommand(cmd.Cmd):
                     self.do_destroy(args[0])
                     return False
                 return False
+            if args[1].split("(")[0] == 'update' and len(args[1]) > 6:
+                ins = args[1].split("(")[1]
+                inps = ins.split(", ")
+                for i in range(len(inps)):
+                    inps[i] = inps[i].replace(")", "")
+                    inps[i] = inps[i].replace("\"", "")
+                a = " "
+                line = args[0] + a + inps[0] + a + inps[1] + a + inps[2]
+                self.do_update(line)
+                return False
         print(f"*** Unknown syntax: {line}")
 
 
