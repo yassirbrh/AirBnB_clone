@@ -182,13 +182,28 @@ class HBNBCommand(cmd.Cmd):
             if args[1] == 'all()':
                 self.do_all(args[0])
                 return False
-            elif args[1] == 'count()':
+            if args[1] == 'count()':
                 instances = models.storage.all()
                 count = 0
                 for instance in instances:
                     if instance.split(".")[0] == args[0]:
                         count += 1
                 print(count)
+                return False
+            if args[1].split("(")[0] == 'show' and len(args[1]) > 4:
+                if args[1].count("\"") != 2:
+                    return False
+                if args[1].split("(")[1][0] == '"':
+                    length = len(args[1].split("(")[1]) - 1
+                    if args[1].split("(")[1][length] == ')':
+                        obj_id = args[1].replace("\"", "")
+                        obj_id = obj_id.replace("show(", "")
+                        obj_id = obj_id.replace(")", "")
+                        self.do_show(args[0] + " " + obj_id)
+                        return False
+                elif args[1].split("(")[1][0] == ')':
+                    self.do_show(args[0])
+                    return False
                 return False
         print(f"*** Unknown syntax: {line}")
 
