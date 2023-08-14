@@ -205,6 +205,21 @@ class HBNBCommand(cmd.Cmd):
                     self.do_show(args[0])
                     return False
                 return False
+            if args[1].split("(")[0] == 'destroy' and len(args[1]) > 7:
+                if args[1].count("\"") != 2:
+                    return False
+                if args[1].split("(")[1][0] == '"':
+                    length = len(args[1].split("(")[1]) - 1
+                    if args[1].split("(")[1][length] == ')':
+                        obj_id = args[1].replace("\"", "")
+                        obj_id = obj_id.replace("destroy(", "")
+                        obj_id = obj_id.replace(")", "")
+                        self.do_destroy(args[0] + " " + obj_id)
+                        return False
+                elif args[1].split("(")[1][0] == ')':
+                    self.do_destroy(args[0])
+                    return False
+                return False
         print(f"*** Unknown syntax: {line}")
 
 
