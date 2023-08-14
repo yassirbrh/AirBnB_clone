@@ -174,6 +174,16 @@ class HBNBCommand(cmd.Cmd):
         setattr(the_obj, args[2], args[3])
         models.storage.save()
 
+    def default(self, line):
+        '''Set default to catch other non-defined commands
+        '''
+        args = line.split(".")
+        if args[0] in HBNBCommand.__classes:
+            if args[1] == 'all()':
+                self.do_all(args[0])
+                return False
+        print(f"*** Unknown syntax: {line}")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
