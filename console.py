@@ -118,6 +118,28 @@ class HBNBCommand(cmd.Cmd):
         '''Update some attributes of specific instances passed as arguments
         '''
         args = line.split()
+        length = len(args)
+        for i in range(length):
+            if i >= len(args):
+                break
+            if args[i][0] == "\"" and args[i][len(args[i]) - 1] != "\"":
+                j = i + 1
+                indexes = []
+                while args[j][len(args[j]) - 1] != "\"" and j < len(args):
+                    args[i] += " "
+                    args[i] += args[j]
+                    indexes.append(j)
+                    j = j + 1
+                args[i] += " "
+                args[i] += args[j]
+                indexes.append(j)
+                idx = 0
+                for index in indexes:
+                    args.pop(index - idx)
+                    idx = idx + 1
+                    i = i + 1
+        for i in range(len(args)):
+            args[i] = args[i].replace("\"", "")
         if len(args) == 0:
             print("** class name missing **")
             return False
@@ -143,7 +165,7 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
             return False
         setattr(the_obj, args[2], args[3])
-
+        models.storage.save()
 
 
 if __name__ == '__main__':
