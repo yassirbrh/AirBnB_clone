@@ -5,6 +5,11 @@
 import cmd
 from models.base_model import BaseModel
 from models.user import User
+from models.amenity import Amenity
+from models.place import Place
+from models.state import State
+from models.city import City
+from models.review import Review
 import models
 
 
@@ -13,7 +18,8 @@ class HBNBCommand(cmd.Cmd):
         Definition of the class HBNBCommand inheriting from cmd.Cmd
     '''
     prompt = '(hbnb) '
-    __classes = ['BaseModel', 'User']
+    __classes = ['BaseModel', 'User', 'Amenity', 'Place', 'State', 'City']
+    __classes.append('Review')
 
     def do_quit(self, arg):
         '''Quit command to exit the program
