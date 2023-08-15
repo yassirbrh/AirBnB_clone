@@ -11,6 +11,15 @@ from models.state import State
 from models.city import City
 from models.review import Review
 import models
+import json
+
+
+def is_valid_json(input_string):
+    try:
+        json.loads(input_string)
+        return True
+    except json.JSONDecodeError:
+        return False
 
 
 class HBNBCommand(cmd.Cmd):
@@ -222,7 +231,22 @@ class HBNBCommand(cmd.Cmd):
                 return False
             if args[1].split("(")[0] == 'update' and len(args[1]) > 6:
                 ins = args[1].split("(")[1]
+                if '{' in ins:
+                    ins = ins.replace(")", "")
+                    inps = ins.split(", {")
+                    inps[1] = "{" + inps[1]
+                    inps[1] = inps[1].replace("'", "\"")
+                    inps[0] = inps[0].replace("\"", "")
+                    if is_valid_json(inps[1]):
+                        dct = json.loads(inps[1])
+                        line = args[0] + " " + inps[0] + " "
+                        for key in dct:
+                            new_line = line + " " + key + " " + str(dct[key])
+                            self.do_update(new_line)
+                    return False
                 inps = ins.split(", ")
+                print(inps)
+                return False
                 for i in range(len(inps)):
                     inps[i] = inps[i].replace(")", "")
                     inps[i] = inps[i].replace("\"", "")
