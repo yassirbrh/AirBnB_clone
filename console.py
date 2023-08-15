@@ -245,8 +245,6 @@ class HBNBCommand(cmd.Cmd):
                             self.do_update(new_line)
                     return False
                 inps = ins.split(", ")
-                print(inps)
-                return False
                 for i in range(len(inps)):
                     inps[i] = inps[i].replace(")", "")
                     inps[i] = inps[i].replace("\"", "")
