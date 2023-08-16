@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Define unittests for console.py.
+"""Defines unittests for console.py.
 
 Unittest classes:
     TestHBNBCommand_prompting
@@ -22,7 +22,7 @@ from unittest.mock import patch
 
 
 class TestHBNBCommand_prompting(unittest.TestCase):
-    """Unittests for testing prompting of HBNB command interpreter."""
+    """Unittests for testing prompting of the HBNB command interpreter."""
 
     def test_prompt_string(self):
         self.assertEqual("(hbnb) ", HBNBCommand.prompt)
@@ -49,6 +49,11 @@ class TestHBNBCommand_help(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd("help create"))
             self.assertEqual(h, output.getvalue().strip())
 
+    def test_help_EOF(self):
+        h = "EOF signal to exit the program."
+        with patch("sys.stdout", new=StringIO()) as output:
+            self.assertFalse(HBNBCommand().onecmd("help EOF"))
+            self.assertEqual(h, output.getvalue().strip())
 
     def test_help_show(self):
         h = ("Usage: show <class> <id> or <class>.show(<id>)\n        "
@@ -58,12 +63,6 @@ class TestHBNBCommand_help(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd("help show"))
             self.assertEqual(h, output.getvalue().strip())
 
-    def test_help_EOF(self):
-        h = "EOF signal to exit the program."
-        with patch("sys.stdout", new=StringIO()) as output:
-            self.assertFalse(HBNBCommand().onecmd("help EOF"))
-            self.assertEqual(h, output.getvalue().strip())
-            
     def test_help_destroy(self):
         h = ("Usage: destroy <class> <id> or <class>.destroy(<id>)\n        "
              "Delete a class instance of a given id.")
@@ -1301,19 +1300,19 @@ class TestHBNBCommand_update(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as output:
             HBNBCommand().onecmd("create Place")
             testId = output.getvalue().strip()
-        testCmd = "update Place {} max_guest 98".format(testId)
+        testCmd = "update Place {} max_guest 89".format(testId)
         self.assertFalse(HBNBCommand().onecmd(testCmd))
         test_dict = storage.all()["Place.{}".format(testId)].__dict__
-        self.assertEqual(98, test_dict["max_guest"])
+        self.assertEqual(89, test_dict["max_guest"])
 
     def test_update_valid_int_attr_dot_notation(self):
         with patch("sys.stdout", new=StringIO()) as output:
             HBNBCommand().onecmd("create Place")
             tId = output.getvalue().strip()
-        testCmd = "Place.update({}, max_guest, 98)".format(tId)
+        testCmd = "Place.update({}, max_guest, 89)".format(tId)
         self.assertFalse(HBNBCommand().onecmd(testCmd))
         test_dict = storage.all()["Place.{}".format(tId)].__dict__
-        self.assertEqual(98, test_dict["max_guest"])
+        self.assertEqual(89, test_dict["max_guest"])
 
     def test_update_valid_float_attr_space_notation(self):
         with patch("sys.stdout", new=StringIO()) as output:
@@ -1466,20 +1465,20 @@ class TestHBNBCommand_update(unittest.TestCase):
             HBNBCommand().onecmd("create Place")
             testId = output.getvalue().strip()
         testCmd = "update Place {} ".format(testId)
-        testCmd += "{'max_guest': 98})"
+        testCmd += "{'max_guest': 89})"
         HBNBCommand().onecmd(testCmd)
         test_dict = storage.all()["Place.{}".format(testId)].__dict__
-        self.assertEqual(98, test_dict["max_guest"])
+        self.assertEqual(89, test_dict["max_guest"])
 
     def test_update_valid_dictionary_with_int_dot_notation(self):
         with patch("sys.stdout", new=StringIO()) as output:
             HBNBCommand().onecmd("create Place")
             testId = output.getvalue().strip()
         testCmd = "Place.update({}, ".format(testId)
-        testCmd += "{'max_guest': 98})"
+        testCmd += "{'max_guest': 89})"
         HBNBCommand().onecmd(testCmd)
         test_dict = storage.all()["Place.{}".format(testId)].__dict__
-        self.assertEqual(98, test_dict["max_guest"])
+        self.assertEqual(89, test_dict["max_guest"])
 
     def test_update_valid_dictionary_with_float_space_notation(self):
         with patch("sys.stdout", new=StringIO()) as output:
